@@ -1,21 +1,25 @@
+using System;
 using System.Windows;
-using PersonalFinanceTracker.ViewModels;
-using PersonalFinanceTracker.Views;
+using System.Windows.Threading;
+using PersonalFinanceTracker.Helpers;
 
 namespace PersonalFinanceTracker
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        public App()
         {
-            base.OnStartup(e);
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
 
-            MainWindow mainWindow = new MainWindow
-            {
-                DataContext = new MainViewModel()
-            };
-            
-            mainWindow.Show();
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Logger.Log($"Unhandled exception: {e.Exception}");
+            MessageBox.Show($"An error occurred: {e.Exception.Message}\n\nCheck the log file for more details.",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            e.Handled = true;
         }
     }
 }

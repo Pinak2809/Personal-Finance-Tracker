@@ -3,11 +3,277 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:PersonalFinanceTracker.Views"
+             xmlns:converters="clr-namespace:PersonalFinanceTracker.Converters"
              mc:Ignorable="d">
-    <Grid Background="White">
-        <TextBlock Text="Budget View"
-                   FontSize="24"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Date Selection -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Select Period:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="100" Margin="0,0,10,0" SelectedItem="{Binding SelectedMonth}">
+                <ComboBoxItem Content="January" Tag="1"/>
+                <ComboBoxItem Content="February" Tag="2"/>
+                <ComboBoxItem Content="March" Tag="3"/>
+                <ComboBoxItem Content="April" Tag="4"/>
+                <ComboBoxItem Content="May" Tag="5"/>
+                <ComboBoxItem Content="June" Tag="6"/>
+                <ComboBoxItem Content="July" Tag="7"/>
+                <ComboBoxItem Content="August" Tag="8"/>
+                <ComboBoxItem Content="September" Tag="9"/>
+                <ComboBoxItem Content="October" Tag="10"/>
+                <ComboBoxItem Content="November" Tag="11"/>
+                <ComboBoxItem Content="December" Tag="12"/>
+            </ComboBox>
+            <ComboBox Width="100" SelectedItem="{Binding SelectedYear}">
+                <ComboBoxItem Content="2024"/>
+                <ComboBoxItem Content="2025"/>
+                <ComboBoxItem Content="2026"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Cash Flow Summary -->
+        <Border Grid.Row="1" 
+                Background="#F5F5F5" 
+                BorderBrush="#DDDDDD" 
+                BorderThickness="1" 
+                Margin="0,0,0,20" 
+                Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Income Summary -->
+                <StackPanel Grid.Column="0" Margin="10">
+                    <TextBlock Text="Income" 
+                             FontWeight="Bold" 
+                             FontSize="16" 
+                             Margin="0,0,0,10"/>
+                    <TextBlock>
+                        <Run Text="Total Income: "/>
+                        <Run Text="{Binding TotalIncome, StringFormat=C2}" 
+                             FontWeight="Bold" 
+                             Foreground="Green"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Expenses Summary -->
+                <StackPanel Grid.Column="1" Margin="10">
+                    <TextBlock Text="Expenses Breakdown" 
+                             FontWeight="Bold" 
+                             FontSize="16" 
+                             Margin="0,0,0,10"/>
+                    <TextBlock>
+                        <Run Text="Savings: "/>
+                        <Run Text="{Binding TotalSavings, StringFormat=C2}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Investments: "/>
+                        <Run Text="{Binding TotalInvestments, StringFormat=C2}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Debt Payments: "/>
+                        <Run Text="{Binding TotalDebt, StringFormat=C2}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Bills and Subscriptions: "/>
+                        <Run Text="{Binding TotalBills, StringFormat=C2}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Other Expenses: "/>
+                        <Run Text="{Binding TotalOtherExpenses, StringFormat=C2}"/>
+                    </TextBlock>
+                    <TextBlock Margin="0,5,0,0" FontWeight="Bold">
+                        <Run Text="Total Expenses: "/>
+                        <Run Text="{Binding TotalExpenses, StringFormat=C2}" 
+                             Foreground="Red"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Cash Flow Summary -->
+                <StackPanel Grid.Column="2" Margin="10">
+                    <TextBlock Text="Cash Flow Summary" 
+                             FontWeight="Bold" 
+                             FontSize="16" 
+                             Margin="0,0,0,10"/>
+                    <TextBlock FontSize="14" FontWeight="Bold">
+                        <Run Text="Cash Leftover: "/>
+                        <Run Text="{Binding CashLeftover, StringFormat=C2}"
+                             Foreground="{Binding CashLeftover, Converter={StaticResource AmountToColorConverter}}"/>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Budget Tables -->
+        <ScrollViewer Grid.Row="2">
+            <StackPanel>
+                <!-- Income Section -->
+                <GroupBox Header="Income" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Content="Add Income" 
+                                Command="{Binding AddIncomeCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5"/>
+
+                        <DataGrid Grid.Row="1" 
+                                  ItemsSource="{Binding IncomeItems}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Source" Binding="{Binding Source}" Width="*"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Mandatory Expenses -->
+                <GroupBox Header="Mandatory Expenses" Margin="0,0,0,20">
+                    <StackPanel>
+                        <!-- Savings Section -->
+                        <GroupBox Header="Savings" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Content="Add Savings Goal" 
+                                        Command="{Binding AddSavingsCommand}"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,5,0,5"/>
+
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding SavingsItems}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Goal" Binding="{Binding Goal}" Width="*"/>
+                                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- Investments Section -->
+                        <GroupBox Header="Investments" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Content="Add Investment" 
+                                        Command="{Binding AddInvestmentCommand}"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,5,0,5"/>
+
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding InvestmentItems}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Investment Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Expected Return (%)" Binding="{Binding ExpectedReturn}" Width="*"/>
+                                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- Debt Payments -->
+                        <GroupBox Header="Debt Payments" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Content="Add Debt Payment" 
+                                        Command="{Binding AddDebtCommand}"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,5,0,5"/>
+
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding DebtItems}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Debt Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- Bills and Subscriptions -->
+                        <GroupBox Header="Bills and Subscriptions" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Content="Add Bill" 
+                                        Command="{Binding AddBillCommand}"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,5,0,5"/>
+
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding BillItems}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                                        <DataGridCheckBoxColumn Header="Is Subscription" Binding="{Binding IsSubscription}" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Other Expenses -->
+                <GroupBox Header="Other Expenses">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Content="Add Expense" 
+                                Command="{Binding AddOtherExpenseCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5"/>
+
+                        <DataGrid Grid.Row="1"
+                                  ItemsSource="{Binding OtherExpenses}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

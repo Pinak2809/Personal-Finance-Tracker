@@ -1,13 +1,12 @@
-// ViewModels/DashboardViewModel.cs
+using PersonalFinanceTracker.ViewModels.Base;
+
 namespace PersonalFinanceTracker.ViewModels
 {
-    public class DashboardViewModel : Base.ViewModelBase
+    public class DashboardViewModel : ViewModelBase
     {
-        public string Title { get; set; } = "Dashboard View";
+        public DashboardViewModel()
+        {
+            // Initialize dashboard-specific properties here
+        }
     }
 }
-
-
-
-
-

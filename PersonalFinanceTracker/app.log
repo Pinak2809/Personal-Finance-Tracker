@@ -1,0 +1,22 @@
+2024-12-10 13:03:25 | MainViewModel.cs | .ctor:24 | Initializing MainViewModel
+2024-12-10 13:03:25 | MainViewModel.cs | Navigate:88 | Navigating to: Dashboard
+2024-12-10 13:03:25 | MainViewModel.cs | Navigate:109 | Successfully navigated to Dashboard
+2024-12-10 13:03:25 | MainViewModel.cs | .ctor:33 | MainViewModel initialized successfully
+2024-12-10 13:03:27 | MainViewModel.cs | Navigate:88 | Navigating to: Budget
+2024-12-10 13:03:27 | BudgetViewModel.cs | .ctor:43 | Initializing BudgetViewModel
+2024-12-10 13:03:27 | BudgetViewModel.cs | .ctor:71 | BudgetViewModel initialized successfully
+2024-12-10 13:03:27 | MainViewModel.cs | Navigate:109 | Successfully navigated to Budget
+2024-12-10 13:04:29 | MainViewModel.cs | .ctor:24 | Initializing MainViewModel
+2024-12-10 13:04:29 | MainViewModel.cs | Navigate:88 | Navigating to: Dashboard
+2024-12-10 13:04:29 | MainViewModel.cs | Navigate:109 | Successfully navigated to Dashboard
+2024-12-10 13:04:29 | MainViewModel.cs | .ctor:33 | MainViewModel initialized successfully
+2024-12-10 13:04:30 | MainViewModel.cs | Navigate:88 | Navigating to: Goals
+2024-12-10 13:04:30 | MainViewModel.cs | Navigate:109 | Successfully navigated to Goals
+2024-12-10 13:04:31 | MainViewModel.cs | Navigate:88 | Navigating to: Assets
+2024-12-10 13:04:31 | MainViewModel.cs | Navigate:109 | Successfully navigated to Assets
+2024-12-10 13:04:32 | MainViewModel.cs | Navigate:88 | Navigating to: Dashboard
+2024-12-10 13:04:32 | MainViewModel.cs | Navigate:109 | Successfully navigated to Dashboard
+2024-12-10 13:04:33 | MainViewModel.cs | Navigate:88 | Navigating to: Budget
+2024-12-10 13:04:33 | BudgetViewModel.cs | .ctor:43 | Initializing BudgetViewModel
+2024-12-10 13:04:33 | BudgetViewModel.cs | .ctor:71 | BudgetViewModel initialized successfully
+2024-12-10 13:04:33 | MainViewModel.cs | Navigate:109 | Successfully navigated to Budget
